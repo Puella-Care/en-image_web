@@ -26,7 +26,7 @@ jobs:
         id: check_files
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
-          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/${{ github.event.pull_request.base.ref }}...${{ github.sha }} | grep '^magica/' || true)
+          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/${{ github.event.pull_request.base.ref }}..${{ github.sha }} | grep '^magica/' || true)
 
           INVALID_FILES=$(echo "$CHANGED_FILES" | grep -v '\.png$' || true)
 
@@ -78,7 +78,7 @@ jobs:
         id: changed_files
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
-          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/${{ github.event.pull_request.base.ref }}...${{ github.sha }} | grep '\.png$' | tr '\n' ' ' || true)
+          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/${{ github.event.pull_request.base.ref }}..${{ github.sha }} | grep '\.png$' | tr '\n' ' ' || true)
 
           echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
