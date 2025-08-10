@@ -20,13 +20,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Validate file extensions
         id: check_files
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/base
           CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/base...HEAD | grep '^magica/' || true)
+
+          echo "CHANGED_FILES=$CHANGED_FILES"
 
           INVALID_FILES=$(echo "$CHANGED_FILES" | grep -v '\.png$' || true)
 
@@ -67,7 +69,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-          fetch-depth: 5
+          fetch-depth: 0
 
       - name: Install required tools
         run: |
@@ -80,6 +82,7 @@ jobs:
           git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/base
           CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/base...HEAD | grep '\.png$' | tr '\n' ' ' || true)
 
+          echo "CHANGED_FILES=$CHANGED_FILES"
           echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Optimize PNG files
